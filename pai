@@ -1,0 +1,5 @@
+#!/bin/sh
+adb root
+adb remount
+adb push *.idc /system/usr/idc
+adb reboot

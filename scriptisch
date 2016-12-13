@@ -1,0 +1,51 @@
+#!/bin/bash
+#
+# Tested only in OS X Yosemite.
+# Requires Deutsch localization for proper work.
+# Made just for fun.
+
+SCRIPT_NAME="scitpisch"
+MEIN_NAME=""
+
+main() {
+    local ANTWORTEN
+    say "Hallo, wie geht's?"
+    printf "$SCRIPT_NAME: Hallo, wie geht's?\n"
+    printf "[${MEIN_NAME}= ";
+    while [[ $ANTWORTEN != "Gute nacht!" ]]; do
+        read ANTWORTEN
+        if [[ $ANTWORTEN != ""  ]]; then
+            say "Du sagst: ${ANTWORTEN}"
+        fi
+        if [[ $ANTWORTEN == *"?" ]]; then
+            if [[ $ANTWORTEN == *"nd dir"* || $ANTWORTEN == *"ie geht"* ]]; then
+                say "Ich bin sehr gut, danke, ${MEIN_NAME}!"
+                printf "$SCRIPT_NAME: Ich bin sehr gut, danke!\n"
+                printf "[${MEIN_NAME}= ";
+            elif [[ $ANTWORTEN == *"ohir kommst"* || $ANTWORTEN == *"ohir kommen"* ]]; then
+                say "Ich komme aus Cupertino, California, ${MEIN_NAME}."
+                printf "$SCRIPT_NAME: Ich komme aus Cupertino, California.\n"
+                printf "[${MEIN_NAME}= ";
+            elif [[ $ANTWORTEN == *"ie heisse Sie"* || $ANTWORTEN == *"ie heisst du"* ]]; then
+                say "Ihr name $SCRIPT_NAME, ${MEIN_NAME}." 
+                printf "$SCRIPT_NAME: Ihr name $SCRIPT_NAME"
+                printf "[${MEIN_NAME}= ";
+            else
+                say "Entschuldigung, ich kann nicht zu dir antworte."
+                printf "$SCRIPT_NAME: Entschuldigung, ich kann nicht zu dir antworte.\n"
+                printf "[${MEIN_NAME}= ";
+            fi
+        else
+            if [[ $ANTWORTEN == *"ein name ist"* || $ANTWORTEN == *"ch heisse"* ]]; then
+                say "Dir name ist?"
+                read MEIN_NAME
+                say "Hallo, ${MEIN_NAME}!"
+            fi
+        fi
+    done
+    say "Aufwiedersehen, ${MEIN_NAME}!"
+    printf "$SCRIPT_NAME: Aufwiedersehen!\n\n";
+    printf "[${MEIN_NAME}= ";
+}
+
+main

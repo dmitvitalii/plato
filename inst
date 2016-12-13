@@ -1,0 +1,56 @@
+#!/bin/sh
+#
+# This is a simple script, which pushes some packages to device.
+
+readonly SRC_HOME="${HOME}/work/sources_yotaphone/"
+readonly OUT_DIR="/out/target/product/yotaphone2/"
+readonly SYS_LIB="/system/lib/"
+readonly SYS_BIN="/system/bin/"
+readonly SYS_FWK="/system/framework/"
+readonly SYS_PA="/system/priv-app/"
+
+if [ "h" != ${1} ]; then
+    adb root && adb remount
+fi
+
+case ${1} in
+    "h")
+        echo "\nif for InputFlinger"
+        echo "inst fs    for Framework Services"
+        echo "inst fsl   for Framework Services with .so libs"
+        echo "inst fw    for Framework itself"
+        echo "inst sui   for SystemUI"
+        echo "inst all   for all of them, except of fsl"
+        ;;
+    "if")
+        echo "[ Install InputFlinger ]"
+        adb push "${SRC_HOME}${OUT_DIR}${SYS_LIB}libinputflinger.so" ${SYS_LIB}
+        adb push "${SRC_HOME}${OUT_DIR}${SYS_LIB}libinputflingerhost.so" ${SYS_LIB}
+        adb push "${SRC_HOME}${OUT_DIR}${SYS_BIN}inputflinger" ${SYS_BIN}
+        ;;
+    "fs")
+        echo "[ Install Framework Services ]"
+        adb push "${SRC_HOME}${OUT_DIR}${SYS_FWK}services.jar" ${SYS_FWK}
+        ;;
+    "fsl") # use it carefully
+        echo "[ Install Framework Services with .so ]"
+        adb push "${SRC_HOME}${OUT_DIR}${SYS_FWK}services.jar" ${SYS_FWK}
+        adb push "${SRC_HOME}${OUT_DIR}${SYS_LIB}libandroid_servers.so" ${SYS_LIB}
+        ;;
+    "fw")
+        echo "[ Install Framework ]"
+        adb push "${SRC_HOME}${OUT_DIR}${SYS_FWK}framework.jar" ${SYS_FWK}
+        adb push "${SRC_HOME}${OUT_DIR}${SYS_FWK}ext.jar" ${SYS_FWK}
+        ;;
+    "sui")
+        echo "[ Install SystemUI ]"
+        adb push "${SRC_HOME}${OUT_DIR}${SYS_PA}/SystemUI/SystemUI.apk" "${SYS_PA}/SystemUI/"
+        ;;
+    "all")
+        echo "[ == Instal everything == ]"
+        inst "fw"
+        inst "fs"
+        inst "if"
+        inst "sui"
+        ;;
+esac

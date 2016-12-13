@@ -1,0 +1,200 @@
+#!/bin/bash
+#
+# Copyright 2016 Vitalii Dmitriev 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Flashes device wit images.
+
+set -o nounset
+set -o noclobber
+
+readonly PROGNAME=${0##*/}
+
+# Options
+readonly SHORTOPTS="h,B,U,C,S:,R:,r"
+readonly LONGOPTS="help,boot,userdata,cache,system:,recovery:,reboot"
+readonly ARGS=$(getopt -s bash --options $SHORTOPTS \
+    --longoptions $LONGOPTS --name $PROGNAME -- "$@")
+
+readonly ANDROID_TOOLS="/Android/Sdk/platform-tools"
+readonly FASTBOOT="${HOME}${ANDROID_TOOLS}/fastboot"
+readonly ADB_ANDROID="${HOME}${ANDROID_TOOLS}/adb"
+readonly ADB="adb"
+readonly BUILD_IMAGES="out/target/product/yotaphone2/"
+
+readonly CYAN='\033[0;36m'
+readonly BLU='\033[0;34m'
+readonly NC='\033[0m'
+
+images="IMAGES" # default directory with images
+# flag reboot or not
+rbt=0
+boot=null
+cache=null
+system=null
+recovery=null
+userdata=null
+
+##################################################
+# Shows help message
+# Globals:
+#   PROGNAME
+##################################################
+usage() {
+    cat <<EO
+Usage:
+
+    ${PROGNAME} [options] <files|dirs>
+
+Options:
+
+EO
+cat <<EO | column -s\& -t
+    -h, --help                  & Print this help.
+    -r, --reboot                & Reboot device after flashing.
+                                  Better be the first provided parameter.
+    -S, --system <file.img>     & Flash with a custom system image.
+    -B, --boot                  & Flash with a boot image.
+    -U, --userdata              & Flash with a userdata image.
+    -R, --recovery <file.img>   & Flash with a custom recovery image.
+    -C, --cache                 & Flash with a cache image.
+    
+EO
+cat <<EO
+
+Example:
+
+    ${PROGNAME}
+
+    with no arguments writes system, boot,
+    cache and recovery from default directiry.
+
+    ${PROGNAME} -rU
+
+    will also flash userdata and reboot the device.
+    Note that the -r parameter better be the first parameter
+    as if it will be combined with other parameters, which are
+    could be used either alone or with a file provided, it could
+    be interpreted as a filename by mistake.
+
+
+    ${PROGNAME} -r -R recovery.img -S system.img
+
+    Flash all with custom recovery, custom system and reboot.
+
+EO
+}
+
+##################################################
+# Flashes needed partition with needed image 
+# Arguments:
+#   part - partition to be flashed
+#   img  - image to flash a partition with
+# Globals:
+#   FASTBOOT - path to the fastboot utility
+##################################################
+flash() {
+    part=${1}
+    img=${2}
+    echo -e "Write "$CYAN"${part}"$NC" with "$BLU"${img}"$NC"!"
+    sudo $FASTBOOT flash ${part} ${img}
+}
+
+main() {
+    
+    eval set -- "$ARGS"
+    while true; do
+        case "${1}" in
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            -i|--images)
+                $images="${2}"
+                shift
+                ;;
+            -S|--system)
+                echo "Flash with custom system!"
+                system="${2}"
+                shift
+                ;;
+            -B|--boot)
+                echo "Flash with boot image!"
+                boot=$images/boot.img
+                shift
+                ;;
+            -U|--userdata)
+                echo "Flash with userdata!"
+                if [ -f "${2}" ]; then
+                    userdata="${2}"
+                else
+                    # default userdata image
+                    userdata=$images/userdata.img
+                fi
+                shift
+                ;;
+            -R|--recovery)
+                echo "Flash with custom recovery!"
+                recovery="${2}"
+                shift
+                ;;
+            -C|--cache)
+                echo "Flash with custom cache!"
+                cache=$images/cache.img
+                shift
+                ;;
+            -r|--reboot)
+                echo "Reboot after flashing!"
+                rbt=1
+                shift
+                ;;
+            --)
+                shift
+                break
+                ;;
+            *)
+                shift
+                ;;
+        esac
+    done
+
+    if [ ! -f $recovery ]; then
+        # default recovery image
+        recovery=$images/recovery.img
+    fi
+    if [ ! -f $system ]; then
+        system=$images/system.img
+    fi
+
+    $ADB reboot bootloader
+
+    if [ -f $boot ]; then
+        flash boot $boot
+    fi
+    if [ -f $userdata ]; then
+        flash userdata $userdata
+    fi
+    if [ -f $cache ]; then
+        flash cache $cache
+    fi
+
+    flash recovery $recovery
+    flash system $system 
+
+    if [ ${rbt} -eq 1 ]; then
+        sudo $FASTBOOT reboot
+    fi
+    echo -e $BLU"DONE!"$NC
+}
+
+main
