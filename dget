@@ -1,0 +1,54 @@
+#!/bin/sh
+#
+# Dummy way to get something from the device
+
+readonly P_NAME=${0##*/}
+readonly D_D=/data/data
+readonly DB=databases
+readonly SHORT_OPTS="h,d:,b,l"
+readonly LONG_OPTS="help,database:,bugreport,last"
+readonly ARGS=$(getopt -s sh --options $SHORT_OPTS --longoptions $LONG_OPTS --name $P_NAME -- "$@")
+
+##################################################
+# Shows help message
+# Globals:
+#   P_NAME
+##################################################
+usage() {
+    cat <<EO
+Usage:
+
+    $P_NAME [options] <packagename>
+    
+Options:
+
+EO
+    cat <<EO | column -s\& -t
+    -h, --help & Print this help.
+    -d, --database <package name> & Get database for a package name.
+    -l, --last & Get database for the last asked package name.
+    -b, --bugreport & Get all bugreports from device.
+EO
+}
+
+eval set -- "$ARGS"
+case "${1}" in
+    -h|--help)
+        usage
+        ;;
+    -d|--database)
+        export LAST_PACKAGE=${2}
+        adb pull ${D_D}/${2}/${DB}/
+        ;;
+    -b|--bugreport)
+        adb pull /data/bugreports/
+        ;;
+    -l|--last)
+        # TODO don't work, fix
+        if [ -z $LAST_PACKAGE ]; then
+            echo "No last package! Try ${P_NAME} -d required.package.name."
+        else
+            adb pull ${D_D}/$LAST_PACKAGE/${DB}/
+        fi    
+        ;;
+esac
