@@ -36,7 +36,8 @@ readonly CYAN='\033[0;36m'
 readonly BLU='\033[0;34m'
 readonly NC='\033[0m'
 
-images="IMAGES" # default directory with images
+# default directory with images
+images="IMAGES"
 # flag reboot or not
 rbt=0
 boot=null
@@ -59,7 +60,8 @@ Usage:
 Options:
 
 EO
-cat <<EO | column -s\& -t
+    cat <<EO | column -s\& -t
+
     -h, --help                  & Print this help.
     -r, --reboot                & Reboot device after flashing.
                                   Better be the first provided parameter.
@@ -70,7 +72,7 @@ cat <<EO | column -s\& -t
     -C, --cache                 & Flash with a cache image.
     
 EO
-cat <<EO
+    cat <<EO
 
 Example:
 

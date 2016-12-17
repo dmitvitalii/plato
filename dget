@@ -31,6 +31,8 @@ EO
 EO
 }
 
+adb root && adb remount
+
 eval set -- "$ARGS"
 case "${1}" in
     -h|--help)
