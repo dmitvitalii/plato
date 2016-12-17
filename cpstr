@@ -1,0 +1,138 @@
+#!/bin/bash
+#
+# Copyright 2016 Vitalii Dmitriev 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Copy string from one project to another. 
+#
+
+set -o nounset
+set -o errexit
+set -o noclobber
+set -o pipefail
+
+# TODO enter the name with parameter
+# The name of all source files to take string for
+readonly SRC_FN="strings.xml"
+# TODO enter the name with parameter
+# The name of all destination files to put string in
+readonly DEST_FN="strings.xml"
+# TODO find a way to give this as a parameter
+# Name of a directory to grep.
+readonly DIR_NAME="values*"
+# TODO find a way to give this as a parameter
+readonly END_TAG="</resources>"
+
+readonly P_NAME=${0##*/}
+
+readonly OPTS="s:,d:,s:"
+readonly LOPTS="source:,destination:,string:"
+readonly ARGS=$(getopt -s bash --options $OPTS --longoptions $LOPTS --name $PROGNAME -- "$@")
+
+SRC_DIR=
+DEST_DIR=
+STR_CP=
+
+usage() {
+    cat<<EO
+Usage:
+
+    ${P_NAME} [options] <path|name>
+
+Options:
+
+EO
+    cat<<EO | column -s\& -t
+
+    -h, --help                  & Print this help.
+    -s, --source                & Directory with the original file.
+    -d, --destination           & Destination directory.
+    -s, --string                & Name of the string to copy.
+EO
+    cat<<EO
+
+Example:
+
+    ${P_NAME} -s /path/to/directory/res -d /path/to/dir/res -c "name=mongooze" 
+EO
+}
+
+check_emptiness() {
+    if [[ -z "${SRC_DIR}" || -z "${DEST_DIR}" ]]; then
+        echo "Missing -s /dir and/or -d /dir\n"
+    fi
+}
+
+addstr() {
+    local dirname="$1"
+    local dest_file="${DEST_DIR}/${dirname}/${DEST_FN}"
+    local adde_str="$2" 
+    if [[ -f "${dest_file}" ]]; then
+	if cat "${dest_file}" | grep "${STR_CP}"; then
+            echo -e "${STR_CP} already exists in the ${dest_file}!\n"
+	else
+            sed -i "s|${END_TAG}|$(echo -ne "   "${adde_str})\n${END_TAG}|" "${dest_file}"
+        fi
+    else
+        echo -e "${dest_file} doesn't exist!\n"
+    fi
+}
+
+replace() {
+    echo -e $SRC_DIR"\n"
+    for directory in $SRC_DIR; do
+        echo "$directory"
+	if cat "${directory}/${SRC_FN}" | grep "${STR_CP}"; then
+            mv_str=`cat "${directory}/${SRC_FN}" | grep "${STR_CP}"`
+            addstr $(basename "${directory}") "${mv_str}"
+        else
+           echo -e "There is no ${STR_CP} in ${directory} \n"
+        fi
+    done
+    mv_str=
+}
+
+main() {
+    eval set -- "${ARGS}"
+    while true; do
+        case "$1" in
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            -s|--source)
+                SRC_DIR="$2"/${DIR_NAME} 
+                shift
+                ;;
+            -d|--destination)
+                DEST_DIR="$2"
+                shift
+                ;;
+            -s|--string)
+                STR_CP="$2"
+                shift
+                ;;
+            --)
+                shift
+                break
+                ;;
+            *)
+                shift
+                ;; 
+        esac
+    done
+}
+
+main
+check_emptiness
+replace
