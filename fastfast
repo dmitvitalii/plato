@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 # Flashes device wit images.
+# TODO: make the script more useful.
 
 set -o nounset
 set -o noclobber
@@ -21,13 +22,14 @@ set -o noclobber
 readonly PROGNAME=${0##*/}
 
 # Options
-readonly SHORTOPTS="h,B,U,C,S:,R:,r"
-readonly LONGOPTS="help,boot,userdata,cache,system:,recovery:,reboot"
+readonly SHORTOPTS="h,B:,U,C,S:,R:,r,M"
+readonly LONGOPTS="help,boot:,userdata,cache,system:,recovery:,reboot,modem"
 readonly ARGS=$(getopt -s bash --options $SHORTOPTS \
     --longoptions $LONGOPTS --name $PROGNAME -- "$@")
 
 readonly ANDROID_TOOLS="/Android/Sdk/platform-tools"
-readonly FASTBOOT="${HOME}${ANDROID_TOOLS}/fastboot"
+readonly FASTBOOT_ANDROID="${HOME}${ANDROID_TOOLS}/fastboot"
+readonly FASTBOOT="fastboot"
 readonly ADB_ANDROID="${HOME}${ANDROID_TOOLS}/adb"
 readonly ADB="adb"
 readonly BUILD_IMAGES="out/target/product/yotaphone2/"
@@ -36,8 +38,7 @@ readonly CYAN='\033[0;36m'
 readonly BLU='\033[0;34m'
 readonly NC='\033[0m'
 
-# default directory with images
-images="IMAGES"
+images="IMAGES" # default directory with images
 # flag reboot or not
 rbt=0
 boot=null
@@ -45,6 +46,7 @@ cache=null
 system=null
 recovery=null
 userdata=null
+radio=null
 
 ##################################################
 # Shows help message
@@ -60,8 +62,7 @@ Usage:
 Options:
 
 EO
-    cat <<EO | column -s\& -t
-
+cat <<EO | column -s\& -t
     -h, --help                  & Print this help.
     -r, --reboot                & Reboot device after flashing.
                                   Better be the first provided parameter.
@@ -70,9 +71,10 @@ EO
     -U, --userdata              & Flash with a userdata image.
     -R, --recovery <file.img>   & Flash with a custom recovery image.
     -C, --cache                 & Flash with a cache image.
+    -M, --modem                 & Flash with radio images.
     
 EO
-    cat <<EO
+cat <<EO
 
 Example:
 
@@ -132,7 +134,7 @@ main() {
                 ;;
             -B|--boot)
                 echo "Flash with boot image!"
-                boot=$images/boot.img
+                boot="${2}"
                 shift
                 ;;
             -U|--userdata)
@@ -153,6 +155,11 @@ main() {
             -C|--cache)
                 echo "Flash with custom cache!"
                 cache=$images/cache.img
+                shift
+                ;;
+            -M|--module)
+                echo "Flash with radio!"
+                radio=1
                 shift
                 ;;
             -r|--reboot)
@@ -177,21 +184,34 @@ main() {
     if [ ! -f $system ]; then
         system=$images/system.img
     fi
+    if [ ! -f $boot ]; then
+        boot=$images/boot.img
+    fi
 
     $ADB reboot bootloader
 
-    if [ -f $boot ]; then
-        flash boot $boot
-    fi
     if [ -f $userdata ]; then
         flash userdata $userdata
     fi
     if [ -f $cache ]; then
         flash cache $cache
     fi
+    if [ $radio -eq 1 ]; then
+        flash modem radio/NON-HLOS.bin
+        flash sbl1 radio/sbl1.mbn
+        flash rpm radio/rpm.mbn
+        flash tz radio/tz.mbn
+    fi
 
-    flash recovery $recovery
-    flash system $system 
+    if [ -f $recovery ]; then
+       flash recovery $recovery
+    fi
+    if [ -f $system ]; then
+        flash system $system
+    fi
+    if [ -f $boot ]; then
+        flash boot $boot
+    fi
 
     if [ ${rbt} -eq 1 ]; then
         sudo $FASTBOOT reboot
