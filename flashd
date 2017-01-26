@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# Simple flasher for RPi 3.
+
+flashit() {
+	device=${1}
+	if [ -n ${device} ]; then
+		echo "====|Flashing the ${device}!|===="
+		date
+		sudo fastboot -s ${device} flash boot boot.img
+		sudo fastboot -s ${device} -S 768M flash system system.img
+		# sudo fastboot -s ${device} -S 768M flash userdata userdata.img
+		sudo fastboot -s ${device} flash cache cache.img
+		sudo fastboot -s ${device} flash recovery recovery.img
+		sudo fastboot -s ${device} reboot
+		echo "====|DONE|===="
+		date
+	fi
+}
+
+for arg in $@; do
+	flashit ${arg} &
+done
