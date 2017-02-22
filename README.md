@@ -12,6 +12,10 @@ Script to download bugreports and databases from an android device.
 
 ## cpstr ##
 Script to copy all strings from one directory with .xml files to another.
+**Example**:
+```
+cpstr -s /path/to/directory/res -d /path/to/dir/res -c "name=\"mongooze\""
+```
 
 ## rr ##
 `adb root && adb remount`
