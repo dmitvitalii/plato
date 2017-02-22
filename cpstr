@@ -33,10 +33,10 @@ readonly DIR_NAME="values*"
 # TODO find a way to give this as a parameter
 readonly END_TAG="</resources>"
 
-readonly P_NAME=${0##*/}
+readonly PROGNAME=${0##*/}
 
-readonly OPTS="s:,d:,s:"
-readonly LOPTS="source:,destination:,string:"
+readonly OPTS="h,s:,d:,n:"
+readonly LOPTS="help,source:,destination:,name:"
 readonly ARGS=$(getopt -s bash --options $OPTS --longoptions $LOPTS --name $PROGNAME -- "$@")
 
 SRC_DIR=
@@ -47,7 +47,7 @@ usage() {
     cat<<EO
 Usage:
 
-    ${P_NAME} [options] <path|name>
+    ${PROGNAME} [options] <path|name>
 
 Options:
 
@@ -57,13 +57,13 @@ EO
     -h, --help                  & Print this help.
     -s, --source                & Directory with the original file.
     -d, --destination           & Destination directory.
-    -s, --string                & Name of the string to copy.
+    -n, --name                  & Name of the string to copy.
 EO
     cat<<EO
 
 Example:
 
-    ${P_NAME} -s /path/to/directory/res -d /path/to/dir/res -c "name=mongooze" 
+    ${PROGNAME} -s /path/to/directory/res -d /path/to/dir/res -c "name=mongooze" 
 EO
 }
 
@@ -118,7 +118,7 @@ main() {
                 DEST_DIR="$2"
                 shift
                 ;;
-            -s|--string)
+            -n|--name)
                 STR_CP="$2"
                 shift
                 ;;
