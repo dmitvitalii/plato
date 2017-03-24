@@ -18,7 +18,7 @@
 # TODO make smart version with finder which could push files right after they're built.
 
 readonly P_NAME=${0##*/}
-readonly SRC_HOME="${HOME}/Workspace/Marshmallow/"
+readonly SRC_HOME="${HOME}/Workspace/YP_Marshmallow/"
 readonly OUT_DIR="/out/target/product/yotaphone2/"
 readonly SYS_LIB="/system/lib/"
 readonly SYS_BIN="/system/bin/"
