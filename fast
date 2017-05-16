@@ -46,7 +46,7 @@ cache=null
 system=null
 recovery=null
 userdata=null
-radio=null
+radio=0
 
 ##################################################
 # Shows help message
