@@ -32,13 +32,18 @@ readonly FASTBOOT_ANDROID="${HOME}${ANDROID_TOOLS}/fastboot"
 readonly FASTBOOT="fastboot"
 readonly ADB_ANDROID="${HOME}${ANDROID_TOOLS}/adb"
 readonly ADB="adb"
-readonly BUILD_IMAGES="out/target/product/yotaphone2/"
+readonly BUILD_IMAGES_M="out/target/product/yotaphone2/"
+readonly BUILD_IMAGES_N="out/target/product/msm8953_64/"
 
 readonly CYAN='\033[0;36m'
 readonly BLU='\033[0;34m'
 readonly NC='\033[0m'
 
-images="IMAGES" # default directory with images
+# Default paths
+readonly DEFAULT="IMAGES"
+readonly DEFAULT_LOWER="images"
+
+images=null
 # flag reboot or not
 rbt=0
 boot=null
@@ -114,8 +119,37 @@ flash() {
     sudo $FASTBOOT flash ${part} ${img}
 }
 
+##################################################
+# Checks whether there are default directories or
+# not. If not, choose another one. If there are no
+# default directories, use root of this script.
+# Globals:
+#   images         - variable, containing path to
+#                    android images.
+#   DEFAULT        - default IMAGES directory.
+#   DEFAULT_LOWER  - same as DEFAULT, lower case.
+#   BUILD_IMAGES_M - images path in Android M.
+#   BUILD_IMAGES_N - images path in Android N.
+##################################################
+check_images() {
+   if [[  -z "${images}" || ! -d "${images}" ]]; then
+       images="${DEFAULT}"
+   fi
+   if [[ ! -d "${images}" ]]; then
+       images="${DEFAULT_LOWER}"
+   fi
+   if [[ ! -d "${images}" ]]; then
+       images="${BUILD_IMAGES_M}"
+   fi
+   if [[ ! -d "${images}" ]]; then
+       images="${BUILD_IMAGES_N}"
+   fi
+   if [[ ! -d "${images}" ]]; then
+       images="."
+   fi 
+}
+
 main() {
-    
     eval set -- "$ARGS"
     while true; do
         case "${1}" in
@@ -139,7 +173,7 @@ main() {
                 ;;
             -U|--userdata)
                 echo "Flash with userdata!"
-                if [ -f "${2}" ]; then
+                if [ -n "${2}" || -f "${2}" ]; then
                     userdata="${2}"
                 else
                     # default userdata image
@@ -154,7 +188,12 @@ main() {
                 ;;
             -C|--cache)
                 echo "Flash with custom cache!"
-                cache=$images/cache.img
+                if [ -n "${2}" || -f "${2}" ]; then
+                    cache="${2}"
+                else
+                    # default cache image
+                    cache=$images/cache.img
+                fi
                 shift
                 ;;
             -M|--module)
@@ -163,7 +202,7 @@ main() {
                 shift
                 ;;
             -r|--reboot)
-                echo "Reboot after flashing!"
+                echo "Reboot after fLASHING!"
                 rbt=1
                 shift
                 ;;
@@ -177,6 +216,10 @@ main() {
         esac
     done
 
+    $ADB reboot bootloader
+
+    check_images
+
     if [ ! -f $recovery ]; then
         # default recovery image
         recovery=$images/recovery.img
@@ -188,14 +231,6 @@ main() {
         boot=$images/boot.img
     fi
 
-    $ADB reboot bootloader
-
-    if [ -f $userdata ]; then
-        flash userdata $userdata
-    fi
-    if [ -f $cache ]; then
-        flash cache $cache
-    fi
     if [ $radio -eq 1 ]; then
         flash modem radio/NON-HLOS.bin
         flash sbl1 radio/sbl1.mbn
@@ -206,11 +241,21 @@ main() {
     if [ -f $recovery ]; then
        flash recovery $recovery
     fi
+
     if [ -f $system ]; then
         flash system $system
     fi
+
     if [ -f $boot ]; then
         flash boot $boot
+    fi
+
+    if [ -f $userdata ]; then
+        flash userdata $userdata
+    fi
+
+    if [ -f $cache ]; then
+        flash cache $cache
     fi
 
     if [ ${rbt} -eq 1 ]; then
