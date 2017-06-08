@@ -14,12 +14,11 @@
 # limitations under the License.
 #
 # This is a dummy script, which pushes some packages to device.
-# Note that your SRC_HOME may be different from the defined there one.
+# Note that your $OUT env variable must be set
+# (e.g. after an initialization of the Android build environment)
 # TODO make smart version with finder which could push files right after they're built.
 
 readonly P_NAME=${0##*/}
-readonly SRC_HOME="${HOME}/Workspace/YP_Marshmallow/"
-readonly OUT_DIR="/out/target/product/yotaphone2/"
 readonly SYS_LIB="/system/lib/"
 readonly SYS_BIN="/system/bin/"
 readonly SYS_FWK="/system/framework/"
@@ -55,27 +54,27 @@ main() {
             ;;
         "if")
             echo "[ Install InputFlinger ]"
-            adb push "${SRC_HOME}${OUT_DIR}${SYS_LIB}libinputflinger.so" ${SYS_LIB}
-            adb push "${SRC_HOME}${OUT_DIR}${SYS_LIB}libinputflingerhost.so" ${SYS_LIB}
-            adb push "${SRC_HOME}${OUT_DIR}${SYS_BIN}inputflinger" ${SYS_BIN}
+            adb push "${OUT}${SYS_LIB}libinputflinger.so" ${SYS_LIB}
+            adb push "${OUT}${SYS_LIB}libinputflingerhost.so" ${SYS_LIB}
+            adb push "${OUT}${SYS_BIN}inputflinger" ${SYS_BIN}
             ;;
         "fs")
             echo "[ Install Framework Services ]"
-            adb push "${SRC_HOME}${OUT_DIR}${SYS_FWK}services.jar" ${SYS_FWK}
+            adb push "${OUT}${SYS_FWK}services.jar" ${SYS_FWK}
             ;;
         "fsl")
             echo "[ Install Framework Services with .so ]"
-            adb push "${SRC_HOME}${OUT_DIR}${SYS_FWK}services.jar" ${SYS_FWK}
-            adb push "${SRC_HOME}${OUT_DIR}${SYS_LIB}libandroid_servers.so" ${SYS_LIB}
+            adb push "${OUT}${SYS_FWK}services.jar" ${SYS_FWK}
+            adb push "${OUT}${SYS_LIB}libandroid_servers.so" ${SYS_LIB}
             ;;
         "fw")
             echo "[ Install Framework ]"
-            adb push "${SRC_HOME}${OUT_DIR}${SYS_FWK}framework.jar" ${SYS_FWK}
-            adb push "${SRC_HOME}${OUT_DIR}${SYS_FWK}ext.jar" ${SYS_FWK}
+            adb push "${OUT}${SYS_FWK}framework.jar" ${SYS_FWK}
+            adb push "${OUT}${SYS_FWK}ext.jar" ${SYS_FWK}
             ;;
         "sui")
             echo "[ Install SystemUI ]"
-            adb push "${SRC_HOME}${OUT_DIR}${SYS_PA}/SystemUI/SystemUI.apk" "${SYS_PA}/SystemUI/"
+            adb push "${OUT}${SYS_PA}/SystemUI/SystemUI.apk" "${SYS_PA}/SystemUI/"
             ;;
         "all")
             echo "[ == Instal everything == ]"
