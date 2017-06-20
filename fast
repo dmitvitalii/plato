@@ -22,8 +22,8 @@ set -o noclobber
 readonly PROGNAME=${0##*/}
 
 # Options
-readonly SHORTOPTS="h,B:,U,C,S:,R:,r,M"
-readonly LONGOPTS="help,boot:,userdata,cache,system:,recovery:,reboot,modem"
+readonly SHORTOPTS="h,i:,B:,U,C,S:,R:,r,M"
+readonly LONGOPTS="help,images:,boot:,userdata,cache,system:,recovery:,reboot,modem"
 readonly ARGS=$(getopt -s bash --options $SHORTOPTS \
     --longoptions $LONGOPTS --name $PROGNAME -- "$@")
 
@@ -33,7 +33,8 @@ readonly FASTBOOT="fastboot"
 readonly ADB_ANDROID="${HOME}${ANDROID_TOOLS}/adb"
 readonly ADB="adb"
 readonly BUILD_IMAGES_M="out/target/product/yotaphone2/"
-readonly BUILD_IMAGES_N="out/target/product/msm8953_64/"
+readonly BUILD_IMAGES_N="out/target/product/Y3/"
+readonly BUILD_IMAGES_EMU="out/target/product/msm8953_64/"
 
 readonly CYAN='\033[0;36m'
 readonly BLU='\033[0;34m'
@@ -124,12 +125,13 @@ flash() {
 # not. If not, choose another one. If there are no
 # default directories, use root of this script.
 # Globals:
-#   images         - variable, containing path to
-#                    android images.
-#   DEFAULT        - default IMAGES directory.
-#   DEFAULT_LOWER  - same as DEFAULT, lower case.
-#   BUILD_IMAGES_M - images path in Android M.
-#   BUILD_IMAGES_N - images path in Android N.
+#   images           - variable, containing a path
+#                      to android images.
+#   DEFAULT          - default IMAGES directory.
+#   DEFAULT_LOWER    - lower case DEFAULT.
+#   BUILD_IMAGES_M   - images path in Android M.
+#   BUILD_IMAGES_N   - images path in Android N.
+#   BUILD_IMAGES_EMU - images path in Android N.
 ##################################################
 check_images() {
    if [[  -z "${images}" || ! -d "${images}" ]]; then
@@ -145,6 +147,9 @@ check_images() {
        images="${BUILD_IMAGES_N}"
    fi
    if [[ ! -d "${images}" ]]; then
+       images="${BUILD_IMAGES_EMU}"
+   fi
+   if [[ ! -d "${images}" ]]; then
        images="."
    fi 
 }
@@ -158,7 +163,7 @@ main() {
                 exit 0
                 ;;
             -i|--images)
-                $images="${2}"
+                images="${2}"
                 shift
                 ;;
             -S|--system)
