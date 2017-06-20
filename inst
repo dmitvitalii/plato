@@ -20,6 +20,7 @@
 
 readonly P_NAME=${0##*/}
 readonly SYS_LIB="/system/lib/"
+readonly SYS_LIB64="/system/lib64/"
 readonly SYS_BIN="/system/bin/"
 readonly SYS_FWK="/system/framework/"
 readonly SYS_PA="/system/priv-app/"
@@ -55,7 +56,9 @@ main() {
         "if")
             echo "[ Install InputFlinger ]"
             adb push "${OUT}${SYS_LIB}libinputflinger.so" ${SYS_LIB}
+            adb push "${OUT}${SYS_LIB64}libinputflinger.so" ${SYS_LIB64}
             adb push "${OUT}${SYS_LIB}libinputflingerhost.so" ${SYS_LIB}
+            adb push "${OUT}${SYS_LIB64}libinputflingerhost.so" ${SYS_LIB64}
             adb push "${OUT}${SYS_BIN}inputflinger" ${SYS_BIN}
             ;;
         "fs")
