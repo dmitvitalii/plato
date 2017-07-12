@@ -1,6 +1,21 @@
 # Description #
 These scripts are made to make work with Android Framework and Android applications easier.
 
+## fwignore ##
+Script to make Android projects be excluded from the build system, or included back.
+Just renames the Android.mk file to AndroidIgnore.mk, which won't be included in the main mk file while building.
+**Example**:
+```
+fwignore i $ANDROID_BUILD_TOP/packages/apps/Dialer
+```
+Will exclude Dialer application from build.
+
+```
+fwignore r $ANDROID_BUILD_TOP/packages/apps/Dialer
+```
+Will make Dialer be buildable again.
+
+
 ## change_ports ##
 This script is for moving all repos from an old port to a new one.
 
