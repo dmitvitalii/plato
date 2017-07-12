@@ -2,6 +2,7 @@
 These scripts are made to make work with Android Framework and Android applications easier.
 
 ## fwignore ##
+**Doesn't work yet!**
 Script to make Android projects be excluded from the build system, or included back.
 Just renames the Android.mk file to AndroidIgnore.mk, which won't be included in the main mk file while building.
 **Example**:

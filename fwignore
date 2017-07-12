@@ -9,10 +9,12 @@ replace() {
     local orig_mk_name=${2}
     local repl_mk_name=${3}
     if [ -n $project ]; then
-        mk_path=$(find $project -name $orig_mk_name)
-        echo "Original: "$mk_path
-        echo "Move to: "$(dirname $mk_path)/$repl_mk_name
-        mv $mk_path $(dirname $mk_path)/$repl_mk_name
+        mk_paths=$(find $project -name $orig_mk_name)
+        echo "Original: "$mk_paths
+        echo "Move to: "$(dirname $mk_paths)/$repl_mk_name
+        for p in $mk_paths; do
+             echo $p "$(dirname $p)/$repl_mk_name"
+        done
     fi
 }
 
