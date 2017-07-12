@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+action="${1}"
+readonly NAME_ORIG="Android.mk"
+readonly NAME_IGNORE="AndroidIgnore.mk"
+
+replace() {
+    local project=${1}
+    local orig_mk_name=${2}
+    local repl_mk_name=${3}
+    if [ -n $project ]; then
+        mk_path=$(find $project -name $orig_mk_name)
+        echo "Original: "$mk_path
+        echo "Move to: "$(dirname $mk_path)/$repl_mk_name
+        mv $mk_path $(dirname $mk_path)/$repl_mk_name
+    fi
+}
+
+if [[ $action == "i" || $action == "ignore" ]]; then
+    replace ${2} $NAME_ORIG $NAME_IGNORE
+elif [[ $action == "r" || $action == "restore" ]]; then
+    replace ${2} $NAME_IGNORE $NAME_ORIG
+else
+    echo "No such action! Use i|ignore or r|restore."
+fi
