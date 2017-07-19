@@ -138,7 +138,7 @@ check_images() {
        images="${DEFAULT_LOWER}"
    fi
    if [[ ! -d "${images}" ]]; then
-        images="${OUT}"
+       images="${OUT}"
    fi
 }
 
