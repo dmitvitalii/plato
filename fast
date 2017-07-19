@@ -32,9 +32,6 @@ readonly FASTBOOT_ANDROID="${HOME}${ANDROID_TOOLS}/fastboot"
 readonly FASTBOOT="fastboot"
 readonly ADB_ANDROID="${HOME}${ANDROID_TOOLS}/adb"
 readonly ADB="adb"
-readonly BUILD_IMAGES_M="out/target/product/yotaphone2/"
-readonly BUILD_IMAGES_N="out/target/product/Y3/"
-readonly BUILD_IMAGES_EMU="out/target/product/msm8953_64/"
 
 readonly CYAN='\033[0;36m'
 readonly BLU='\033[0;34m'
@@ -54,11 +51,11 @@ recovery=null
 userdata=null
 radio=0
 
-##################################################
+###################################################################
 # Shows help message
 # Globals:
 #   PROGNAME
-##################################################
+###################################################################
 usage() {
     cat <<EO
 Usage:
@@ -105,14 +102,14 @@ Example:
 EO
 }
 
-##################################################
+###################################################################
 # Flashes needed partition with needed image 
 # Arguments:
 #   part - partition to be flashed
 #   img  - image to flash a partition with
 # Globals:
 #   FASTBOOT - path to the fastboot utility
-##################################################
+###################################################################
 flash() {
     part=${1}
     img=${2}
@@ -120,20 +117,21 @@ flash() {
     sudo $FASTBOOT flash ${part} ${img}
 }
 
-##################################################
+###################################################################
 # Checks whether there are default directories or
 # not. If not, choose another one. If there are no
 # default directories, use root of this script.
 # Globals:
-#   images           - variable, containing a path
-#                      to android images.
-#   DEFAULT          - default IMAGES directory.
-#   DEFAULT_LOWER    - lower case DEFAULT.
-#   BUILD_IMAGES_M   - images path in Android M.
-#   BUILD_IMAGES_N   - images path in Android N.
-#   BUILD_IMAGES_EMU - images path in Android N.
-##################################################
+#     images         - variable, containing a path to built images.
+#     DEFAULT        - default IMAGES directory.
+#     DEFAULT_LOWER  - default images directory.
+#     OUT            - android build directory, set by the lunch
+#                      function from an android envsetup script.
+###################################################################
 check_images() {
+    if [[ ! -d "${images}" ]]; then
+       images="."
+   fi
    if [[  -z "${images}" || ! -d "${images}" ]]; then
        images="${DEFAULT}"
    fi
@@ -141,17 +139,8 @@ check_images() {
        images="${DEFAULT_LOWER}"
    fi
    if [[ ! -d "${images}" ]]; then
-       images="${BUILD_IMAGES_M}"
+        images="${OUT}"
    fi
-   if [[ ! -d "${images}" ]]; then
-       images="${BUILD_IMAGES_N}"
-   fi
-   if [[ ! -d "${images}" ]]; then
-       images="${BUILD_IMAGES_EMU}"
-   fi
-   if [[ ! -d "${images}" ]]; then
-       images="."
-   fi 
 }
 
 main() {
