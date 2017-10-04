@@ -2,7 +2,7 @@
 
 action="${1}"
 readonly NAME_ORIG="Android.mk"
-readonly NAME_IGNORE="AndroidIgnore.mk"
+readonly NAME_IGNORE=".ignore.Android.mk"
 
 replace() {
     local project=${1}
@@ -23,5 +23,5 @@ if [[ $action == "i" || $action == "ignore" ]]; then
 elif [[ $action == "r" || $action == "restore" ]]; then
     replace ${2} $NAME_IGNORE $NAME_ORIG
 else
-    echo "No such action! Use i|ignore or r|restore."
+    echo "No such action! Use i (ignore) or r (restore)."
 fi
