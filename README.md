@@ -16,10 +16,6 @@ fwignore r $ANDROID_BUILD_TOP/packages/apps/Dialer
 ```
 Will make Dialer be buildable again.
 
-
-## change_ports ##
-This script is for moving all repos from an old port to a new one.
-
 ## fast ##
 Script, made to simplify pushing firmwares to the device.
 **Usage**:
