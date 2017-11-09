@@ -3,7 +3,6 @@
 # TODO: make it toggle.
 # TODO: make it be recursive only with -r param.
 
-action="${1}"
 readonly NAME_ORIG="Android.mk"
 readonly NAME_IGNORE=".ignore.Android.mk"
 
@@ -21,10 +20,16 @@ replace() {
     fi
 }
 
+action="${1}"
+directory="${2}"
+if [ -z $directory ]; then
+    directory=$(pwd)
+fi
+
 if [[ $action == "i" || $action == "ignore" ]]; then
-    replace ${2} $NAME_ORIG $NAME_IGNORE
+    replace ${directory} $NAME_ORIG $NAME_IGNORE
 elif [[ $action == "r" || $action == "restore" ]]; then
-    replace ${2} $NAME_IGNORE $NAME_ORIG
+    replace ${directory} $NAME_IGNORE $NAME_ORIG
 else
     echo "No such action! Use i (ignore) or r (restore)."
 fi
