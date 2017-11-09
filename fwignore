@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+# TODO: make it toggle.
+# TODO: make it be recursive only with -r param.
 
 action="${1}"
 readonly NAME_ORIG="Android.mk"
@@ -13,7 +16,7 @@ replace() {
         echo "Original: "$mk_paths
         echo "Move to: "$(dirname $mk_paths)/$repl_mk_name
         for p in $mk_paths; do
-             echo $p "$(dirname $p)/$repl_mk_name"
+             mv $p "$(dirname $p)/$repl_mk_name"
         done
     fi
 }
