@@ -26,10 +26,10 @@ if [ -z $directory ]; then
     directory=$(pwd)
 fi
 
-if [[ $action == "i" || $action == "ignore" ]]; then
+if [[ $action == "e" || $action == "exclude" ]]; then
     replace ${directory} $NAME_ORIG $NAME_IGNORE
-elif [[ $action == "r" || $action == "restore" ]]; then
+elif [[ $action == "i" || $action == "include" ]]; then
     replace ${directory} $NAME_IGNORE $NAME_ORIG
 else
-    echo "No such action! Use i (ignore) or r (restore)."
+    echo "No such action! Use e (exclude) or i (include)."
 fi
