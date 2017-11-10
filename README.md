@@ -3,6 +3,8 @@ These scripts are made to make work with Android Framework and Android applicati
 
 ## mignore ##
 
+Works only for projects with `Android.mk`. If you have Android O with `Android.bp` files, the script won't work for you yet.
+
 Script to make Android projects be excluded from the build system, or included back.
 Just renames the Android.mk file to AndroidIgnore.mk, which won't be included in the main mk file while building.
 **Example**:
@@ -15,6 +17,11 @@ Will exclude Dialer application from build.
 mignore i $ANDROID_BUILD_TOP/packages/apps/Dialer
 ```
 Will make Dialer be buildable again.
+
+**TODO:**
+* Make it be able to toggle a project without keys;
+* Make it be able to set `enabled: false/true` to `Android.bp` files and ignore a project in any build systems;
+* Make it recursive with an `r` key and nonrecursive without it;
 
 ## fast ##
 Script, made to simplify pushing firmwares to the device.

@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-#
-# TODO: make it toggle.
-# TODO: make it be recursive only with -r param.
 
 readonly NAME_ORIG="Android.mk"
 readonly NAME_IGNORE=".ignore.Android.mk"
