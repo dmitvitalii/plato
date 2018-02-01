@@ -72,6 +72,13 @@ Installs some built framework projects:
 ## gerpush ##
 Push changes to gerrit. Instead of alias again.
 
+## findout ##
+Find something inside the `out/` directory of AOSP build tree.
+```
+findout LIBTHEsome.so # strict search
+findout -f thesome # case insensitive search of a word entrances
+```
+
 ## License ##
 
 ```

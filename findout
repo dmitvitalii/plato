@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [ ${1} == '-f' ]; then
+    find ${ANDROID_BUILD_TOP}/out/target/product -iname "*${1}*"
+else
+    find ${ANDROID_BUILD_TOP}/out/target/product -name "${1}"
+fi
