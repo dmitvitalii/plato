@@ -79,6 +79,12 @@ findout LIBTHEsome.so # strict search
 findout -f thesome # case insensitive search of a word entrances
 ```
 
+## pl & pb ##
+
+Push libraries or binaries to the `/system/lib64` and `/system/bin` respectively.
+TODO: "pusher" with an ability to push with chosing where to push: `/system`, `/vendor`, or even `/data`.
+
+
 ## License ##
 
 ```
