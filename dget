@@ -60,11 +60,10 @@ case "${1}" in
         adb pull /data/bugreports/
         ;;
     -l|--last)
-        # TODO don't work, fix
-        if [ -z $LAST_PACKAGE ]; then
-            echo "No last package! Try ${P_NAME} -d required.package.name."
-        else
+        if [[ $LAST_PACKAGE ]]; then
             adb pull ${D_D}/$LAST_PACKAGE/${DB}/
+        else
+            echo "No last package! Try ${P_NAME} -d required.package.name."
         fi    
         ;;
 esac
