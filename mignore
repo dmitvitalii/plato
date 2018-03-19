@@ -2,6 +2,7 @@
 
 readonly NAME_ORIG="Android.mk"
 readonly NAME_IGNORE=".ignore.Android.mk"
+readonly BLUEPRINT="Android.bp"
 
 replace() {
     local project=${1}
@@ -22,7 +23,9 @@ if [ -z $directory ]; then
     directory=$(pwd)
 fi
 
-if [ $(find ${directory} -name ${NAME_ORIG}) ]; then
+if [ $(find ${directory} -name ${BLUEPRINT}) ]; then
+    echo "${directory} has Android.bp, not supported yet!";
+elif [ $(find ${directory} -name ${NAME_ORIG}) ]; then
     replace ${directory} $NAME_ORIG $NAME_IGNORE
 elif [ $(find ${directory} -name ${NAME_IGNORE}) ]; then
     replace ${directory} $NAME_IGNORE $NAME_ORIG
