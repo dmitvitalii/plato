@@ -17,16 +17,15 @@ replace() {
     fi
 }
 
-action="${1}"
-directory="${2}"
+directory="${1}"
 if [ -z $directory ]; then
     directory=$(pwd)
 fi
 
-if [[ $action == "e" || $action == "exclude" ]]; then
+if [ $(find ${directory} -name ${NAME_ORIG}) ]; then
     replace ${directory} $NAME_ORIG $NAME_IGNORE
-elif [[ $action == "i" || $action == "include" ]]; then
+elif [ $(find ${directory} -name ${NAME_IGNORE}) ]; then
     replace ${directory} $NAME_IGNORE $NAME_ORIG
 else
-    echo "No such action! Use e (exclude) or i (include)."
+    echo "No Android.mk file found!"
 fi
