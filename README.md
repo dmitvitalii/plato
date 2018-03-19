@@ -9,17 +9,16 @@ Script to make Android projects be excluded from the build system, or included b
 Just renames the Android.mk file to AndroidIgnore.mk, which won't be included in the main mk file while building.
 **Example**:
 ```
-mignore e $ANDROID_BUILD_TOP/packages/apps/Dialer
+mignore $ANDROID_BUILD_TOP/packages/apps/Dialer
 ```
-Will exclude Dialer application from build.
+Will exclude Dialer application from build if there is an `Android.mk` file.
 
 ```
-mignore i $ANDROID_BUILD_TOP/packages/apps/Dialer
+mignore $ANDROID_BUILD_TOP/packages/apps/Dialer
 ```
-Will make Dialer be buildable again.
+Will make Dialer be buildable again, if there is an `.ignore.Android.mk` file.
 
 **TODO:**
-* Make it be able to toggle a project without keys;
 * Make it be able to set `enabled: false/true` to `Android.bp` files and ignore a project in any build systems;
 * Make it recursive with an `r` key and nonrecursive without it;
 
