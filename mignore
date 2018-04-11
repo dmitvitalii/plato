@@ -16,6 +16,8 @@
 
 readonly NAME_ORIG="Android.mk"
 readonly NAME_IGNORE=".ignore.Android.mk"
+readonly NAME_IGNORE_2=".Android.mk"
+readonly NAME_IGNORE_3="Android.mk.old"
 readonly BLUEPRINT="Android.bp"
 
 replace() {
