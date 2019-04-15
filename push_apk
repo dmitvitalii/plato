@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+name=${1}
+apk_path=$(find $ANDROID_PRODUCT_OUT -name ${name})
+device_path=$(echo ${apk_path} | sed -e 's|'"${ANDROID_PRODUCT_OUT}"'||g')
+
+if [[ -n ${apk_path} ]]; then
+    adb push ${apk_path} ${device_path}
+else 
+    echo "Can't push ${name}: no such file"
+fi
