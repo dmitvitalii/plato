@@ -83,6 +83,18 @@ findout -f thesome # case insensitive search of a word entrances
 Push libraries or binaries to the `/system/lib64` and `/system/bin` respectively.
 TODO: "pusher" with an ability to push with chosing where to push: `/system`, `/vendor`, or even `/data`.
 
+## push_apk ##
+Gets an apk and pushes it on the device. Figures out where to push by itself, e.g.:
+```
+push_apk Dialer.apk
+```
+Will push Dialer to the `/system/priv-app/Dialer/` dir.
+```
+push_apk Stk.apk
+```
+Will push it to the `/system/app/Stk/` dir.
+TODO: Add an ability to provide a name either with or without an `.apk` extension.
+
 
 ## License ##
 
