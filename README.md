@@ -94,6 +94,7 @@ push_apk Stk.apk
 ```
 Will push it to the `/system/app/Stk/` dir.
 TODO: Add an ability to provide a name either with or without an `.apk` extension.
+TODO: Add an ability to push the whole directory, instead of pushing just an `.apk` file.
 
 
 ## License ##
