@@ -93,14 +93,16 @@ Will push Dialer to the `/system/priv-app/Dialer/` dir.
 push_apk Stk.apk
 ```
 Will push it to the `/system/app/Stk/` dir.
+
 TODO: Add an ability to provide a name either with or without an `.apk` extension.
+
 TODO: Add an ability to push the whole directory, instead of pushing just an `.apk` file.
 
 
 ## License ##
 
 ```
-Copyright (C) 2016 Vitalii Dmitriev
+Copyright (C) 2019 Vitalii Dmitriev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
