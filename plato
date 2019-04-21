@@ -18,6 +18,7 @@ import sys
 import os
 from subprocess import call
 
+VERSION = '0.1.0'
 APK_EXT = '.apk'
 
 
