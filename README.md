@@ -11,6 +11,7 @@ or
 source plato
 push ApkName.apk # can be both with or without an extension
 ```
+Supports the `la root` or `la rr` command, which is a replacement for the `rr` script.
 
 ## mignore ##
 
