@@ -2,3 +2,7 @@
 #This will provide us an opportunity to use it as following:
 #`source plato` 
 #`push_apk AppName.apk`
+
+push() {
+    la push ${1}
+}
