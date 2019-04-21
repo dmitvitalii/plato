@@ -17,22 +17,26 @@
 import sys
 import os
 from subprocess import call
+from os.path import abspath, basename, splitext
 
-VERSION = '0.1.0'
+VERSION = '0.1.1'
 APK_EXT = '.apk'
 
 
 def get_device_path(out_dir_path):
-    return out_dir_path.split(os.environ('ANDROID_PRODUCT_OUT'))[1]
+    return "/%s" % out_dir_path.split(os.environ['ANDROID_PRODUCT_OUT'])[-1]
 
 
 def push_apk(apk):
-    name, ext = os.path.splitext(apk)
+    abs_path = abspath(apk)
+    name, ext = splitext(basename(apk))
+
     if len(name) == 0:
         print("error: no filename provided")
     if len(ext) == 0:
         apk = '{}.{}'.format(apk, APK_EXT)
-    call(['adb', 'push', apk, get_device_path(apk)])
+    # TODO: check whether the adb installed before call!
+    call(['adb', 'push', apk, get_device_path(abs_path)])
 
 
 def main():
