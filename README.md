@@ -1,5 +1,16 @@
 # Description #
+
 These scripts are made to make work with Android Framework and Android applications easier.
+
+## plato ##
+Future replacement of all of these scripts.
+Now supports a `push` command, which is a replacement of the `push_apk` script:
+`la push ApkName`
+or
+```
+source plato
+push ApkName.apk # can be both with or without an extension
+```
 
 ## mignore ##
 
