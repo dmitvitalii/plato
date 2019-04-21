@@ -6,3 +6,11 @@
 push() {
     la push ${1}
 }
+
+rr() {
+  la rr
+}
+
+root() {
+  la root
+}
