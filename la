@@ -19,8 +19,9 @@ import os
 from subprocess import call
 from os.path import abspath, basename, splitext
 
-VERSION = '0.1.1'
+VERSION = '0.1.2'
 APK_EXT = '.apk'
+ADB = 'adb'
 
 
 def get_device_path(out_dir_path):
@@ -36,12 +37,19 @@ def push_apk(apk):
     if len(ext) == 0:
         apk = '{}.{}'.format(apk, APK_EXT)
     # TODO: check whether the adb installed before call!
-    call(['adb', 'push', apk, get_device_path(abs_path)])
+    call([ADB, 'push', apk, get_device_path(abs_path)])
+
+
+def remount_as_root():
+    call([ADB, 'root'])
+    call([ADB, 'remount'])
 
 
 def main():
     if sys.argv[1] == 'push':
         push_apk(sys.argv[2])
+    elif sys.argv[1] == 'root' or sys.argv[1] == 'rr':
+        remount_as_root()
 
 
 if __name__ == "__main__":
