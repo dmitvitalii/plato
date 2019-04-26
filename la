@@ -46,9 +46,10 @@ def remount_as_root():
 
 
 def main():
-    if sys.argv[1] == 'push':
+    cmd = sys.argv[1]
+    if cmd == 'push':
         push_apk(sys.argv[2])
-    elif sys.argv[1] == 'root' or sys.argv[1] == 'rr':
+    elif cmd == 'root' or cmd == 'rr':
         remount_as_root()
 
 
