@@ -3,15 +3,29 @@
 These scripts are made to make work with Android Framework and Android applications easier.
 
 ## plato ##
-Future replacement of all of these scripts.
-Now supports a `push` command, which is a replacement of the `push_apk` script:
-`la push ApkName`
-or
+Plato stands for **PLA**tform **TO**ols. A tool, which combines several shortcuts and scripts, used for the android platform development.
+
+Future replacement for all of the other scripts in this repository.
+
+## la root ##
+`la rr` or `la root` performs the `adb root && adb remount`
+
+*(`rr` script replacement)*
+
+## la push ##
+Gets an apk and pushes it on the device. Figures out where to push by itself, e.g.:
 ```
-source plato
-push ApkName.apk # can be both with or without an extension
+la push Dialer.apk
 ```
-Supports the `la root` or `la rr` command, which is a replacement for the `rr` script.
+Will push Dialer to the `/system/priv-app/Dialer/` dir.
+```
+la push Stk.apk
+```
+Will push it to the `/system/app/Stk/` dir.
+
+**TODO:** Add an ability to push the whole directory, instead of pushing just an `.apk` file.
+
+*(`push_apk` script replacement)*
 
 ## mignore ##
 
@@ -60,10 +74,6 @@ Script to copy all strings from one directory with .xml files to another.
 cpstr -s /path/to/directory/res -d /path/to/dir/res -c "name=\"mongooze\""
 ```
 
-## rr ##
-`adb root && adb remount`
-Why not alias? **Because I can**
-
 ## pai ##
 ```
 adb root
@@ -94,22 +104,6 @@ findout -f thesome # case insensitive search of a word entrances
 
 Push libraries or binaries to the `/system/lib64` and `/system/bin` respectively.
 TODO: "pusher" with an ability to push with chosing where to push: `/system`, `/vendor`, or even `/data`.
-
-## push_apk ##
-Gets an apk and pushes it on the device. Figures out where to push by itself, e.g.:
-```
-push_apk Dialer.apk
-```
-Will push Dialer to the `/system/priv-app/Dialer/` dir.
-```
-push_apk Stk.apk
-```
-Will push it to the `/system/app/Stk/` dir.
-
-TODO: Add an ability to provide a name either with or without an `.apk` extension.
-
-TODO: Add an ability to push the whole directory, instead of pushing just an `.apk` file.
-
 
 ## License ##
 
