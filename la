@@ -14,12 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import argparse
 import sys
 import os
 from subprocess import call
 from os.path import abspath, basename, splitext
 
-VERSION = '0.1.2'
+VERSION = '0.1.3'
 APK_EXT = '.apk'
 ADB = 'adb'
 
@@ -28,7 +29,8 @@ def get_device_path(out_dir_path):
     return "/%s" % out_dir_path.split(os.environ['ANDROID_PRODUCT_OUT'])[-1]
 
 
-def push_apk(apk):
+def push_apk(args):
+    apk = args.apk
     abs_path = abspath(apk)
     name, ext = splitext(basename(apk))
 
@@ -40,17 +42,24 @@ def push_apk(apk):
     call([ADB, 'push', apk, get_device_path(abs_path)])
 
 
-def remount_as_root():
+def remount_as_root(args):
     call([ADB, 'root'])
     call([ADB, 'remount'])
 
 
 def main():
-    cmd = sys.argv[1]
-    if cmd == 'push':
-        push_apk(sys.argv[2])
-    elif cmd == 'root' or cmd == 'rr':
-        remount_as_root()
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers()
+
+    subparsers.add_parser('root', help='adb root && adb remount').set_defaults(function=remount_as_root)
+    subparsers.add_parser('rr', help='adb root && adb remount').set_defaults(function=remount_as_root)
+
+    push_parser = subparsers.add_parser('push', help='Push an apk file to the device')
+    push_parser.add_argument('apk', help='Name or path of an apk file')
+    push_parser.set_defaults(function=push_apk)
+
+    args = parser.parse_args()
+    args.function(args)
 
 
 if __name__ == "__main__":
