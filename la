@@ -18,9 +18,9 @@ import argparse
 import sys
 import os
 from subprocess import call
-from os.path import abspath, basename, splitext
+from os.path import abspath, basename, splitext, dirname
 
-VERSION = '0.1.3'
+VERSION = '0.1.4'
 APK_EXT = '.apk'
 ADB = 'adb'
 
@@ -30,14 +30,14 @@ def get_device_path(out_dir_path):
 
 
 def push_apk(args):
+    """TODO: check whether the adb installed before call!"""
     apk = args.apk
     abs_path = abspath(apk)
     name, ext = splitext(basename(apk))
-
-    if len(ext) == 0:
-        apk = '{}.{}'.format(apk, APK_EXT)
-    # TODO: check whether the adb installed before call!
-    call([ADB, 'push', apk, get_device_path(abs_path)])
+    dir_name = dirname(abs_path)
+    apk = '{}.{}'.format(apk, APK_EXT) if len(ext) == 0 else apk
+    data = dir_name if args.dir else apk
+    call([ADB, 'push', data, get_device_path(abs_path)])
 
 
 def remount_as_root(args):
@@ -54,6 +54,7 @@ def main():
 
     push_parser = subparsers.add_parser('push', help='Push an apk file to the device')
     push_parser.add_argument('apk', help='Name or path of an apk file')
+    push_parser.add_argument('-d', '--dir', action='store_true', help='Push the whole directory')
     push_parser.set_defaults(function=push_apk)
 
     args = parser.parse_args()
