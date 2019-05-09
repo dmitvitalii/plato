@@ -34,8 +34,6 @@ def push_apk(args):
     abs_path = abspath(apk)
     name, ext = splitext(basename(apk))
 
-    if len(name) == 0:
-        print("error: no filename provided")
     if len(ext) == 0:
         apk = '{}.{}'.format(apk, APK_EXT)
     # TODO: check whether the adb installed before call!
