@@ -21,8 +21,6 @@ la push Stk.apk
 ```
 Will push it to the `/system/app/Stk/` dir.
 
-**TODO:** Add an ability to push the whole directory, instead of pushing just an `.apk` file.
-
 ## mignore ##
 
 Works only for projects with `Android.mk`. If you have Android O with `Android.bp` files, the script won't work for you yet.
