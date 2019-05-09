@@ -10,8 +10,6 @@ Future replacement for all of the other scripts in this repository.
 ## la root ##
 `la rr` or `la root` performs the `adb root && adb remount`
 
-*(`rr` script replacement)*
-
 ## la push ##
 Gets an apk and pushes it on the device. Figures out where to push by itself, e.g.:
 ```
@@ -24,8 +22,6 @@ la push Stk.apk
 Will push it to the `/system/app/Stk/` dir.
 
 **TODO:** Add an ability to push the whole directory, instead of pushing just an `.apk` file.
-
-*(`push_apk` script replacement)*
 
 ## mignore ##
 
