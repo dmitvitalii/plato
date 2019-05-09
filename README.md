@@ -17,9 +17,13 @@ la push Dialer.apk
 ```
 Will push Dialer to the `/system/priv-app/Dialer/` dir.
 ```
-la push Stk.apk
+la push Stk
 ```
 Will push it to the `/system/app/Stk/` dir.
+```
+la push -d SystemUI
+```
+Will push everything from `SystemUI/` directory, including `oat/` to `/system/priv-app/SystemUI` directory.
 
 ## mignore ##
 
