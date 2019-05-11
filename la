@@ -59,12 +59,12 @@ def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
 
-    subparsers.add_parser('root', help='adb root && adb remount').set_defaults(function=remount_as_root)
     subparsers.add_parser('rr', help='adb root && adb remount').set_defaults(function=remount_as_root)
+    subparsers.add_parser('root', help='Same as rr').set_defaults(function=remount_as_root)
 
     push_parser = subparsers.add_parser('push', help='''Push a file to the device.
     The filename can be provider either with an extension, or without.
-    If several files were found, will push the first found''')
+    If several files were found, will push the first one''')
     push_parser.add_argument('file', help='Name or path of an apk file')
     push_parser.add_argument('-d', '--dir', action='store_true', help='Push the whole directory')
     push_parser.set_defaults(function=push_file)
