@@ -18,10 +18,10 @@ import argparse
 import sys
 import os
 from subprocess import call
-from os.path import abspath, basename, splitext, dirname
+from os import listdir
+from os.path import abspath, basename, dirname, isfile, join
 
-VERSION = '0.1.4'
-APK_EXT = '.apk'
+VERSION = '0.1.5'
 ADB = 'adb'
 
 
@@ -29,14 +29,24 @@ def get_device_path(out_dir_path):
     return "/%s" % out_dir_path.split(os.environ['ANDROID_PRODUCT_OUT'])[-1]
 
 
-def push_apk(args):
+def find_file(abs_path):
+    path = dirname(abs_path)
+    name = basename(abs_path)
+    files = [file for file in listdir(path) if isfile(join(path, file)) and file.startswith(name)]
+
+    if len(files):
+        return files[0]
+    else:
+        raise FileNotFoundError()
+
+
+def push_file(args):
     """TODO: check whether the adb installed before call!"""
-    apk = args.apk
-    abs_path = abspath(apk)
-    name, ext = splitext(basename(apk))
-    dir_name = dirname(abs_path)
-    apk = '{}.{}'.format(apk, APK_EXT) if len(ext) == 0 else apk
-    data = dir_name if args.dir else apk
+    abs_path = abspath(args.file)
+    if args.dir:
+        data = dirname(abs_path)
+    else:
+        data = find_file(args.file)
     call([ADB, 'push', data, get_device_path(abs_path)])
 
 
@@ -52,10 +62,12 @@ def main():
     subparsers.add_parser('root', help='adb root && adb remount').set_defaults(function=remount_as_root)
     subparsers.add_parser('rr', help='adb root && adb remount').set_defaults(function=remount_as_root)
 
-    push_parser = subparsers.add_parser('push', help='Push an apk file to the device')
-    push_parser.add_argument('apk', help='Name or path of an apk file')
+    push_parser = subparsers.add_parser('push', help='''Push a file to the device.
+    The filename can be provider either with an extension, or without.
+    If several files were found, will push the first found''')
+    push_parser.add_argument('file', help='Name or path of an apk file')
     push_parser.add_argument('-d', '--dir', action='store_true', help='Push the whole directory')
-    push_parser.set_defaults(function=push_apk)
+    push_parser.set_defaults(function=push_file)
 
     args = parser.parse_args()
     args.function(args)
