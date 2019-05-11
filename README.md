@@ -25,8 +25,6 @@ la push -d SystemUI
 ```
 Will push everything from `SystemUI/` directory, including `oat/` to `/system/priv-app/SystemUI` directory.
 
-TODO: add an ability to push to some particular mount point: `/system`, `/vendor`, or `/product`.
-
 ## mignore ##
 
 Works only for projects with `Android.mk`. If you have Android O with `Android.bp` files, the script won't work for you yet.
@@ -43,10 +41,6 @@ Will exclude Dialer application from build if there is an `Android.mk` file.
 mignore $ANDROID_BUILD_TOP/packages/apps/Dialer
 ```
 Will make Dialer be buildable again, if there is an `.ignore.Android.mk` file.
-
-**TODO:**
-* Make it be able to set `enabled: false/true` to `Android.bp` files and ignore a project in any build systems;
-* Make it recursive with an `r` key and nonrecursive without it;
 
 ## fast ##
 Script, made to simplify pushing firmwares to the device.
