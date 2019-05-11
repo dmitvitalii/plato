@@ -27,8 +27,6 @@ Will push everything from `SystemUI/` directory, including `oat/` to `/system/pr
 
 TODO: add an ability to push to some particular mount point: `/system`, `/vendor`, or `/product`.
 
-TODO: if one pushes some filename w/o an extension, Plato will try to push it as an `.apk` file. Determine the type according to the parent directory (it could be `.so`, or could have no extension at all).
-
 ## mignore ##
 
 Works only for projects with `Android.mk`. If you have Android O with `Android.bp` files, the script won't work for you yet.
