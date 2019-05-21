@@ -68,7 +68,7 @@ def make(args):
 
 
 def ship(args):
-    branch = args.branch if 'HEAD' in args.branch else 'HEAD:refs/for/%s' % args.branch
+    branch = args.branch if args.branch.startswith('HEAD:') else 'HEAD:refs/for/%s' % args.branch
     call(['git', 'push', args.remote or 'origin', branch])
 
 
