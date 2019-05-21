@@ -67,9 +67,20 @@ def make(args):
         call(['make', '-j', jobs])
 
 
+def ship(args):
+    branch = args.branch if 'HEAD' in args.branch else 'HEAD:refs/for/%s' % args.branch
+    call(['git', 'push', args.remote or 'origin', branch])
+
+
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
+
+    ship_parser = subparsers.add_parser('ship', help='Send a code to gerrit. More flexible equivalent to git push origin HEAD:refs/for/branch')
+    ship_parser.add_argument('-r', '--remote', help='Specify a remote, if need to use non-default')
+    ship_parser.add_argument('branch', help='''A branch name (e.g. master) or a full revision (e.g. HEAD:refs/meta/config).
+    If just a name was specified, creates a full branch name before push: master will become a HEAD:refs/for/master''')
+    ship_parser.set_defaults(function=ship)
 
     make_parser = subparsers.add_parser('make', help='Build a firmware or an application')
     make_parser.add_argument('-l', '--lunch', help='If specified, init a new environment for a specific built type. Can be either a number or a name')
