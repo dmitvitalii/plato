@@ -43,6 +43,26 @@ To setup an `eng` build and build a firmware using 8 jobs:
 la make -l eng -j8
 ```
 
+## la ship ##
+Ships a new change or a patch-set to Gerrit.
+You can specify a branch name much shorter, but if your branchname contains `HEAD`,
+plato will treat it as a full qualified branch name and won't append to `HEAD:refs/for/` again.
+
+To do `git push origin HEAD:refs/for/master`:
+```
+la ship master 
+```
+
+To do `git push myremote HEAD:refs/for/develop`:
+```
+la ship -r myremote develop
+```
+
+To do `git push origin HEAD:refs/meta/config`:
+```
+la ship HEAD:refs/meta/config
+```
+
 ## mignore ##
 
 Works only for projects with `Android.mk`. If you have Android O with `Android.bp` files, the script won't work for you yet.
