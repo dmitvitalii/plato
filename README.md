@@ -25,6 +25,24 @@ la push -d SystemUI
 ```
 Will push everything from `SystemUI/` directory, including `oat/` to `/system/priv-app/SystemUI` directory.
 
+## la make ##
+Builds a firmware or an application. Here are some options.
+
+To build a firmware using number of cores + 1, with a previously initialized environment:
+```
+la make
+```
+
+To setup a `userdebug` build and build a frameworks.jar using 5 jobs for `make`:
+```
+la make --lunch userdebug --app platform/frameworks/base -j5
+```
+
+To setup an `eng` build and build a firmware using 8 jobs:
+```
+la make -l eng -j8
+```
+
 ## mignore ##
 
 Works only for projects with `Android.mk`. If you have Android O with `Android.bp` files, the script won't work for you yet.
