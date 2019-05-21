@@ -20,6 +20,7 @@ import os
 from subprocess import call
 from os import listdir
 from os.path import abspath, basename, dirname, isfile, join
+import multiprocessing
 
 VERSION = '0.1.5'
 ADB = 'adb'
@@ -55,9 +56,27 @@ def remount_as_root(args):
     call([ADB, 'remount'])
 
 
+def make(args):
+    jobs = args.jobs if args.jobs else multiprocessing.cpu_count() + 1
+    if args.lunch:
+        print(['source', 'build/envsetup.sh'])
+        print(['lunch', args.lunch])
+    if args.app:
+        print(['mma', args.app, '-j', jobs])
+    else:
+        print(['make', '-j', jobs])
+
+
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
+
+    make_parser = subparsers.add_parser('make', help='Build a firmware or an application')
+    make_parser.add_argument('-l', '--lunch', help='If specified, init a new environment for a specific built type. Can be either a number or a name')
+    make_parser.add_argument('--app', help='Build an app instead of a firmware. Specify a project name (can be found in a manifest file)')
+    make_parser.add_argument('-j', '--jobs', type=int, help='''Specify a number of tasks. See make -j.
+    If not specified, uses a number of cores + 1 by default''')
+    make_parser.set_defaults(function=make)
 
     subparsers.add_parser('rr', help='adb root && adb remount').set_defaults(function=remount_as_root)
     subparsers.add_parser('root', help='Same as rr').set_defaults(function=remount_as_root)
