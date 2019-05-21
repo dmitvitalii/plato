@@ -103,7 +103,9 @@ Installs some built framework projects:
 - SystemUI.
 
 ## gerpush ##
-Push changes to gerrit. Instead of alias again.
+~~Push changes to gerrit. Instead of alias again.~~ 
+
+`la ship branch_name`
 
 ## findout ##
 Find something inside the `out/` directory of AOSP build tree.
@@ -115,4 +117,5 @@ findout -f thesome # case insensitive search of a word entrances
 ## pl & pb ##
 
 ~~Push libraries or binaries to the `/system/lib64` and `/system/bin` respectively.~~
+
 `la push some.so`
