@@ -59,12 +59,12 @@ def remount_as_root(args):
 def make(args):
     jobs = args.jobs if args.jobs else multiprocessing.cpu_count() + 1
     if args.lunch:
-        print(['source', 'build/envsetup.sh'])
-        print(['lunch', args.lunch])
+        call(['source', 'build/envsetup.sh'])
+        call(['lunch', args.lunch])
     if args.app:
-        print(['mma', args.app, '-j', jobs])
+        call(['mma', args.app, '-j', jobs])
     else:
-        print(['make', '-j', jobs])
+        call(['make', '-j', jobs])
 
 
 def main():
