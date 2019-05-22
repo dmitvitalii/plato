@@ -25,6 +25,10 @@ la push -d SystemUI
 ```
 Will push everything from `SystemUI/` directory, including `oat/` to `/system/priv-app/SystemUI` directory.
 
+TODO: work with other extensions (e.g. `.jar`, `.so`, `.elf`, `.idc` etc)
+
+TODO: handle applications, whose names and paths are not exactly the same as on devices.
+
 ## la make ##
 Builds a firmware or an application. Here are some options.
 
@@ -133,9 +137,3 @@ Find something inside the `out/` directory of AOSP build tree.
 findout LIBTHEsome.so # strict search
 findout -f thesome # case insensitive search of a word entrances
 ```
-
-## pl & pb ##
-
-~~Push libraries or binaries to the `/system/lib64` and `/system/bin` respectively.~~
-
-`la push some.so`
