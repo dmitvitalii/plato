@@ -1,1 +1,0 @@
-rr; adb push $ANDROID_PRODUCT_OUT/system/priv-app/SystemUI/SystemUI.apk /system/priv-app/SystemUI/ && adb push $ANDROID_PRODUCT_OUT/system/priv-app/SystemUI/oat/ /system/priv-app/SystemUI/; adb reboot
