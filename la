@@ -72,6 +72,12 @@ def ship(args):
     call(['git', 'push', args.remote or 'origin', branch])
 
 
+def on(args):
+    pass
+
+def off(args):
+    pass
+
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
