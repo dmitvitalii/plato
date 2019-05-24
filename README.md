@@ -84,6 +84,8 @@ mignore $ANDROID_BUILD_TOP/packages/apps/Dialer
 ```
 Will make Dialer be buildable again, if there is an `.ignore.Android.mk` file.
 
+TODO: `la on Dialer`, `la off inputflinger` as a replacement
+
 ## fast ##
 Script, made to simplify pushing firmwares to the device.
 **Usage**:
