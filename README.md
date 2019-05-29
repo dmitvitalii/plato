@@ -128,11 +128,6 @@ Installs some built framework projects:
 - Framework Services;
 - SystemUI.
 
-## gerpush ##
-~~Push changes to gerrit. Instead of alias again.~~ 
-
-`la ship branch_name`
-
 ## findout ##
 Find something inside the `out/` directory of AOSP build tree.
 ```
