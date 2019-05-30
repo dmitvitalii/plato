@@ -21,6 +21,9 @@ from subprocess import call
 from os import listdir
 from os.path import abspath, basename, dirname, isfile, join
 import multiprocessing
+import logging
+
+logger = logging.getLogger()
 
 VERSION = '0.1.6'
 ADB = 'adb'
@@ -28,9 +31,25 @@ ADB = 'adb'
 PLATFORM = 'darwin' if sys.platform == 'darwin' else 'linux-x86'
 SOONG_BIN_DIR = '/out/soong/host/%s/bin/' % PLATFORM
 
+try:
+    OUT = os.environ['ANDROID_PRODUCT_OUT']
+except KeyError:
+    logger.warning('$ANDROID_PRODUCT_OUT was not exported. Trying to use $OUT instead...')
+    try:
+        OUT = os.environ['OUT']
+    except KeyError:
+        raise KeyError('A build/envsetup.sh file was not sourced. Perform: source build/envsetup.sh')
+
 
 def get_device_path(out_dir_path):
-    return "/%s" % out_dir_path.split(os.environ['ANDROID_PRODUCT_OUT'])[-1]
+    return "/%s" % out_dir_path.split(OUT)[-1]
+
+
+def find_out(args):
+    if args.strict:
+        call(['find', OUT, '-name', "%s" % args.name])
+    else:
+        call(['find', OUT, '-iname', "*%s*" % args.name])
 
 
 def find_file(abs_path):
@@ -107,6 +126,11 @@ def main():
     push_parser.add_argument('file', help='Name or path of an apk file')
     push_parser.add_argument('-d', '--dir', action='store_true', help='Push the whole directory')
     push_parser.set_defaults(function=push_file)
+
+    find_parser = subparsers.add_parser('find', help='Find something in out directory')
+    find_parser.add_argument('name', help='A name of a file to find')
+    find_parser.add_argument('-s', '--strict', action='store_true', help='Strict search: case sensitive and full name with an extension (if any)')
+    find_parser.set_defaults(function=find_out)
 
     args = parser.parse_args()
     args.function(args)
