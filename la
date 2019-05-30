@@ -25,7 +25,7 @@ import logging
 
 logger = logging.getLogger()
 
-VERSION = '0.1.6'
+VERSION = '0.1.7'
 ADB = 'adb'
 
 PLATFORM = 'darwin' if sys.platform == 'darwin' else 'linux-x86'
