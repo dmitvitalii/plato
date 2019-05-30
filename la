@@ -25,6 +25,9 @@ import multiprocessing
 VERSION = '0.1.6'
 ADB = 'adb'
 
+PLATFORM = 'darwin' if sys.platform == 'darwin' else 'linux-x86'
+SOONG_BIN_DIR = '/out/soong/host/%s/bin/' % PLATFORM
+
 
 def get_device_path(out_dir_path):
     return "/%s" % out_dir_path.split(os.environ['ANDROID_PRODUCT_OUT'])[-1]
