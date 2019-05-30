@@ -129,10 +129,3 @@ adb remount
 adb push *.idc /system/usr/idc
 adb reboot
 ```
-
-## findout ##
-Find something inside the `out/` directory of AOSP build tree.
-```
-findout LIBTHEsome.so # strict search
-findout -f thesome # case insensitive search of a word entrances
-```
