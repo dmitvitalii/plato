@@ -104,14 +104,6 @@ fast -rU
 ```
 Will flash device with userdata and reboot.
 
-## flashd ##
-Simple script, which also pushes firmwares to devices, but with only device ids as a parameter,
-and optimised to use on Raspberry Pi (with 768Mb RAM minimum).
-**Usage**:
-```
-flashd 123ab456 789cd987
-```
-
 ## dget ##
 Script to download bugreports and databases from an android device.
 
