@@ -67,6 +67,16 @@ To do `git push origin HEAD:refs/meta/config`:
 la ship HEAD:refs/meta/config
 ```
 
+## la find ##
+
+Searches for files in the `out/` directory.
+
+**Example**:
+```
+la find libInputflinger # Case insensitive, not strict. Will find libinputflinger.so
+la find -s Dialer.apk # Strict and case sensitive search
+```
+
 ## mignore ##
 
 Works only for projects with `Android.mk`. If you have Android O with `Android.bp` files, the script won't work for you yet.
@@ -85,16 +95,6 @@ mignore $ANDROID_BUILD_TOP/packages/apps/Dialer
 Will make Dialer be buildable again, if there is an `.ignore.Android.mk` file.
 
 TODO: `la on Dialer`, `la off inputflinger` as a replacement
-
-## la find ##
-
-Searches for files in the `out/` directory.
-
-**Example**:
-```
-la find libInputflinger # Case insensitive, not strict. Will find libinputflinger.so
-la find -s Dialer.apk # Strict and case sensitive search
-```
 
 ## fast ##
 Script, made to simplify pushing firmwares to the device.
