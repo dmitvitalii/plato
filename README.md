@@ -120,14 +120,6 @@ adb push *.idc /system/usr/idc
 adb reboot
 ```
 
-## inst ##
-Dummy script.
-Installs some built framework projects:
-- InputFlinger;
-- Framework;
-- Framework Services;
-- SystemUI.
-
 ## findout ##
 Find something inside the `out/` directory of AOSP build tree.
 ```
