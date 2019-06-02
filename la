@@ -97,22 +97,27 @@ def ship(args):
 def on(args):
     pass
 
+
 def off(args):
     pass
+
 
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
 
-    ship_parser = subparsers.add_parser('ship', help='Send a code to gerrit. More flexible equivalent to git push origin HEAD:refs/for/branch')
+    ship_parser = subparsers.add_parser('ship', help='''Send a code to Gerrit.
+    More flexible equivalent to git push origin HEAD:refs/for/branch''')
     ship_parser.add_argument('-r', '--remote', help='Specify a remote, if need to use non-default')
-    ship_parser.add_argument('branch', help='''A branch name (e.g. master) or a full revision (e.g. HEAD:refs/meta/config).
+    ship_parser.add_argument('branch', help='''A branch name like master or HEAD:refs/meta/config.
     If just a name was specified, creates a full branch name before push: master will become a HEAD:refs/for/master''')
     ship_parser.set_defaults(function=ship)
 
     make_parser = subparsers.add_parser('make', help='Build a firmware or an application')
-    make_parser.add_argument('-l', '--lunch', help='If specified, init a new environment for a specific built type. Can be either a number or a name')
-    make_parser.add_argument('--app', help='Build an app instead of a firmware. Specify a project name (can be found in a manifest file)')
+    make_parser.add_argument('''-l''', '''--lunch''', help='''If specified, init a new environment for a specific built
+     type. Can either be a number or a name''')
+    make_parser.add_argument('''--app''', help='''Build an app instead of a firmware.
+    Specify a project name (can be found in a manifest file)''')
     make_parser.add_argument('-j', '--jobs', type=int, help='''Specify a number of tasks. See make -j.
     If not specified, uses a number of cores + 1 by default''')
     make_parser.set_defaults(function=make)
@@ -129,7 +134,8 @@ def main():
 
     find_parser = subparsers.add_parser('find', help='Find something in out directory')
     find_parser.add_argument('name', help='A name of a file to find')
-    find_parser.add_argument('-s', '--strict', action='store_true', help='Strict search: case sensitive and full name with an extension (if any)')
+    find_parser.add_argument('-s', '--strict', action='store_true',
+                             help='Strict search: case sensitive and full name with an extension (if any)')
     find_parser.set_defaults(function=find_out)
 
     args = parser.parse_args()
