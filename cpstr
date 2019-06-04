@@ -62,7 +62,7 @@ EO
 
 Example:
 
-    ${PROGNAME} -s /path/to/directory/res -d /path/to/dir/res -c "name=\\"mongooze\\""
+    ${PROGNAME} -s /path/to/directory/res -d /path/to/dir/res -n "name=\\"mongooze\\""
 EO
 }
 
