@@ -102,6 +102,10 @@ def off(args):
     pass
 
 
+def copy(args):
+    call(['cpstr', '-s', args.source, '-d', args.destination, '-n', args.name])
+
+
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
@@ -137,6 +141,12 @@ def main():
     find_parser.add_argument('-s', '--strict', action='store_true',
                              help='Strict search: case sensitive and full name with an extension (if any)')
     find_parser.set_defaults(function=find_out)
+
+    copy_parser = subprocess.add_parser('copy', help='Copy a string.xml string from one set of directories to another. For now just calls the cpstr script.')
+    copy_parser.add_argument('-s', '--source')
+    copy_parser.add_argument('-d', '--destination')
+    copy_parser.add_argument('-n', '--name')
+    copy_parser.set_defaults(function=copy)
 
     args = parser.parse_args()
     args.function(args)
