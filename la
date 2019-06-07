@@ -15,13 +15,13 @@
 # limitations under the License.
 
 import argparse
-import sys
+import logging
+import multiprocessing
 import os
-from subprocess import call
+import sys
 from os import listdir
 from os.path import abspath, basename, dirname, isfile, join
-import multiprocessing
-import logging
+from subprocess import call
 
 logger = logging.getLogger()
 
@@ -151,7 +151,8 @@ def main():
                              help='Strict search: case sensitive and full name with an extension (if any)')
     find_parser.set_defaults(function=find_out)
 
-    copy_parser = subparsers.add_parser('copy', help='Copy a string.xml string from one set of directories to another. For now just calls the cpstr script.')
+    copy_parser = subparsers.add_parser('copy', help='''Copy a string.xml string from one set of directories to another.
+                                        For now just calls the cpstr script.''')
     copy_parser.add_argument('-s', '--source')
     copy_parser.add_argument('-d', '--destination')
     copy_parser.add_argument('-n', '--name')
