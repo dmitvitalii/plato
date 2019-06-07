@@ -79,6 +79,8 @@ la find -s Dialer.apk # Strict and case sensitive search
 
 ## mignore ##
 
+Called by `la ignore` command.
+
 Works only for projects with `Android.mk`. If you have Android O with `Android.bp` files, the script won't work for you yet.
 
 Script to make Android projects be excluded from the build system, or included back.
